@@ -10,8 +10,9 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ArrowLeft, Shield, Clock, AlertTriangle } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { venues } from "@/lib/mock-data";
+import { ReconciliationResult } from "@/lib/types";
 
 export default function ReconcilePage() {
   const {
@@ -22,25 +23,24 @@ export default function ReconcilePage() {
     setCurrentStep,
   } = useApp();
 
-  const [loading, setLoading] = useState(!reconciliationResult);
-  const [result, setResult] = useState(reconciliationResult);
+  const [loading, setLoading] = useState(false);
+  const [localResult, setLocalResult] = useState<ReconciliationResult | null>(null);
+  const [fetched, setFetched] = useState(false);
 
-  useEffect(() => {
-    if (result) return;
+  const result = reconciliationResult || localResult;
 
+  // Trigger fetch imperatively — called during render if not yet fetched
+  if (!result && !fetched) {
+    setFetched(true);
     setLoading(true);
-
     fetch("/api/reconcile", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ event, participants, venues }),
     })
-      .then((res) => {
-        if (!res.ok) throw new Error("Reconciliation failed");
-        return res.json();
-      })
+      .then((res) => res.json())
       .then((data) => {
-        setResult(data);
+        setLocalResult(data);
         setReconciliationResult(data);
         setLoading(false);
       })
@@ -48,10 +48,7 @@ export default function ReconcilePage() {
         console.error("Reconciliation error:", err);
         setLoading(false);
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // result is local state, updated by useEffect above
+  }
 
   return (
     <div className="space-y-8 animate-fade-in-up">
@@ -81,7 +78,6 @@ export default function ReconcilePage() {
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Hard constraints */}
               <div className="space-y-3">
                 <div className="flex items-center gap-2 text-sm text-white/60">
                   <Shield className="w-4 h-4 text-[#C75050]" />
@@ -89,14 +85,11 @@ export default function ReconcilePage() {
                 </div>
                 <div className="space-y-1.5">
                   {result.groupAnalysis.hardConstraints.map((c, i) => (
-                    <p key={i} className="text-xs text-white/40 pl-6">
-                      {c}
-                    </p>
+                    <p key={i} className="text-xs text-white/40 pl-6">{c}</p>
                   ))}
                 </div>
               </div>
 
-              {/* Soft constraints */}
               <div className="space-y-3">
                 <div className="flex items-center gap-2 text-sm text-white/60">
                   <AlertTriangle className="w-4 h-4 text-[#A0784A]" />
@@ -104,9 +97,7 @@ export default function ReconcilePage() {
                 </div>
                 <div className="space-y-1.5">
                   {result.groupAnalysis.softConstraints.map((c, i) => (
-                    <p key={i} className="text-xs text-white/40 pl-6">
-                      {c}
-                    </p>
+                    <p key={i} className="text-xs text-white/40 pl-6">{c}</p>
                   ))}
                 </div>
               </div>
@@ -116,23 +107,15 @@ export default function ReconcilePage() {
               <div className="flex items-start gap-3">
                 <Clock className="w-4 h-4 text-white/40 mt-0.5 shrink-0" />
                 <div>
-                  <p className="text-xs text-white/30 mb-0.5">
-                    Schedule Overlap
-                  </p>
-                  <p className="text-sm text-white/60">
-                    {result.groupAnalysis.scheduleOverlap}
-                  </p>
+                  <p className="text-xs text-white/30 mb-0.5">Schedule Overlap</p>
+                  <p className="text-sm text-white/60">{result.groupAnalysis.scheduleOverlap}</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <AlertTriangle className="w-4 h-4 text-[#A0784A] mt-0.5 shrink-0" />
                 <div>
-                  <p className="text-xs text-white/30 mb-0.5">
-                    Primary Tension
-                  </p>
-                  <p className="text-sm text-white/60">
-                    {result.groupAnalysis.primaryTension}
-                  </p>
+                  <p className="text-xs text-white/30 mb-0.5">Primary Tension</p>
+                  <p className="text-sm text-white/60">{result.groupAnalysis.primaryTension}</p>
                 </div>
               </div>
             </div>
