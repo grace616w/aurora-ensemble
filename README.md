@@ -1,36 +1,88 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Aurora Ensemble — Group Experience Coordination
 
-## Getting Started
+A working prototype demonstrating multi-party experience coordination for [Aurora](https://joinaurora.co), an AI-powered premium lifestyle management platform.
 
-First, run the development server:
+## The Problem
+
+Aurora's product today is built around **single-member preference graphs**. When a member wants to plan a dinner, trip, or experience for a group, the system has no mechanism to ingest multiple participants' preferences, reconcile conflicts, propose ranked options with reasoning, or surface where a human Lifestyle Strategist needs to step in.
+
+## What This Prototype Does
+
+Aurora Ensemble is a 4-step workflow that coordinates group experiences:
+
+1. **Create Experience** — Define the event type, location, date, and vibe
+2. **Add Participants** — Import Aurora member profiles (with full preference + wearable data) and invite external guests
+3. **AI Reconciliation** — Claude analyzes all participant constraints, scores venues against the multi-person constraint set, and flags irreconcilable conflicts
+4. **Group Proposal** — Shareable proposal with ranked venue options and group voting
+
+### Key Features
+
+- **Multi-dimensional constraint reconciliation** across dietary, cuisine, ambiance, schedule, and neighborhood preferences
+- **Health-aware coordination** that factors in wearable data (Oura, Whoop) for timing optimization
+- **Confidence scoring** with transparent reasoning for each venue recommendation
+- **Escalation detection** that identifies when AI can't resolve a conflict and pre-packages context for a human Lifestyle Strategist
+- **Guest intake flow** that demonstrates how non-members get pulled into Aurora's orbit through group events
+
+## Running Locally
 
 ```bash
+# Install dependencies
+npm install
+
+# Set up environment (optional — works without API key using mock data)
+cp .env.example .env.local
+# Add your Anthropic API key to .env.local
+
+# Start dev server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## What's Real vs. Simulated
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Component | Status |
+|---|---|
+| Claude API reconciliation | **Real** — sends structured preference data to Claude and receives scored, reasoned venue recommendations |
+| Member preference profiles | Simulated — hardcoded mock data representing 3 Aurora members + 1 guest |
+| Venue data | Simulated — 8 pre-loaded NYC restaurants with realistic attributes |
+| Wearable health data | Simulated — mock Oura/Whoop scores |
+| Preference intake for guests | Simulated — CTA shows a toast notification |
+| Voting | Local state only — no persistence |
+| Booking confirmation | Simulated — no real reservation system |
 
-## Learn More
+## Tech Stack
 
-To learn more about Next.js, take a look at the following resources:
+- Next.js 15 (App Router)
+- TypeScript
+- Tailwind CSS v4
+- Framer Motion
+- Claude API via `@anthropic-ai/sdk`
+- Lucide React icons
+- Manrope + JetBrains Mono (Google Fonts)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Architecture
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+app/
+  page.tsx              → Landing/dashboard
+  create/page.tsx       → Step 1: event creation
+  participants/page.tsx → Step 2: participant management
+  reconcile/page.tsx    → Step 3: AI reconciliation output
+  proposal/page.tsx     → Step 4: group proposal + voting
+  api/reconcile/route.ts → Claude API integration
 
-## Deploy on Vercel
+components/
+  ui/                   → Design system primitives
+  participant-card.tsx  → Member/guest preference card
+  venue-card.tsx        → Ranked venue recommendation
+  preference-graph.tsx  → Group compatibility visualization
+  confidence-badge.tsx  → AI confidence score indicator
+  handoff-banner.tsx    → Lifestyle Strategist escalation UI
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+lib/
+  types.ts              → TypeScript interfaces
+  mock-data.ts          → Pre-built profiles and venues
+  context.tsx           → App state (React Context)
+  reconciliation-engine.ts → Claude prompt builder
+```
