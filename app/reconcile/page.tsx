@@ -10,9 +10,72 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ArrowLeft, Shield, Clock, AlertTriangle } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useReducer } from "react";
 import { venues } from "@/lib/mock-data";
-import { ReconciliationResult } from "@/lib/types";
+import { ReconciliationResult, EventDetails, MemberProfile } from "@/lib/types";
+
+type FetchState = {
+  loading: boolean;
+  data: ReconciliationResult | null;
+};
+
+type FetchAction =
+  | { type: "start" }
+  | { type: "success"; data: ReconciliationResult }
+  | { type: "error" };
+
+function fetchReducer(state: FetchState, action: FetchAction): FetchState {
+  switch (action.type) {
+    case "start":
+      return { loading: true, data: null };
+    case "success":
+      return { loading: false, data: action.data };
+    case "error":
+      return { loading: false, data: null };
+  }
+}
+
+function useFetchReconciliation(
+  event: EventDetails,
+  participants: MemberProfile[],
+  existingResult: ReconciliationResult | null,
+  onResult: (data: ReconciliationResult) => void
+) {
+  const [state, dispatch] = useReducer(fetchReducer, {
+    loading: !existingResult,
+    data: existingResult,
+  });
+
+  useEffect(() => {
+    if (existingResult) return;
+
+    dispatch({ type: "start" });
+
+    const controller = new AbortController();
+
+    fetch("/api/reconcile", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ event, participants, venues }),
+      signal: controller.signal,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        dispatch({ type: "success", data });
+        onResult(data);
+      })
+      .catch((err) => {
+        if (err.name !== "AbortError") {
+          console.error("Reconciliation error:", err);
+          dispatch({ type: "error" });
+        }
+      });
+
+    return () => controller.abort();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  return state;
+}
 
 export default function ReconcilePage() {
   const {
@@ -23,32 +86,14 @@ export default function ReconcilePage() {
     setCurrentStep,
   } = useApp();
 
-  const [loading, setLoading] = useState(false);
-  const [localResult, setLocalResult] = useState<ReconciliationResult | null>(null);
-  const [fetched, setFetched] = useState(false);
+  const { loading, data } = useFetchReconciliation(
+    event,
+    participants,
+    reconciliationResult,
+    setReconciliationResult
+  );
 
-  const result = reconciliationResult || localResult;
-
-  // Trigger fetch on client only — called during render if not yet fetched
-  if (!result && !fetched && typeof window !== "undefined") {
-    setFetched(true);
-    setLoading(true);
-    fetch("/api/reconcile", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ event, participants, venues }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setLocalResult(data);
-        setReconciliationResult(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Reconciliation error:", err);
-        setLoading(false);
-      });
-  }
+  const result = reconciliationResult || data;
 
   return (
     <div className="space-y-8 animate-fade-in-up">
