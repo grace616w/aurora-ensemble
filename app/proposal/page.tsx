@@ -108,10 +108,12 @@ export default function ProposalPage() {
 
       <div>
         <h1 className="text-2xl font-light tracking-[0.02em] text-[#F5F5F5] mb-2">
-          Group Proposal
+          {event.type === "travel" ? "Lodging Proposal" : "Group Proposal"}
         </h1>
         <p className="text-sm text-white/40">
-          Top 3 recommendations — tap avatars to vote
+          {event.type === "travel"
+            ? "Top recommendations — tap avatars to vote on lodging"
+            : "Top 3 recommendations — tap avatars to vote"}
         </p>
       </div>
 
@@ -205,8 +207,9 @@ export default function ProposalPage() {
                   Booking Request Sent
                 </h3>
                 <p className="text-xs text-white/40 mt-0.5">
-                  Your Lifestyle Strategist will finalize the reservation at{" "}
-                  {winnerVenue?.name} and send confirmations to all participants.
+                  {event.type === "travel"
+                    ? `Your Lifestyle Strategist will coordinate booking at ${winnerVenue?.name}, arrange flights and transfers, and send the complete itinerary to all ${participants.length} travelers.`
+                    : `Your Lifestyle Strategist will finalize the reservation at ${winnerVenue?.name} and send confirmations to all participants.`}
                 </p>
               </div>
             </div>

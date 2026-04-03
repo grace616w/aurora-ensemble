@@ -7,11 +7,13 @@ import { ParticipantCard } from "@/components/participant-card";
 import { PreferenceGraph } from "@/components/preference-graph";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, ArrowLeft } from "lucide-react";
+import { ArrowRight, ArrowLeft, Plane, MapPin, Accessibility } from "lucide-react";
 import { useState } from "react";
+import { travelFlights } from "@/lib/mock-data";
 
 export default function ParticipantsPage() {
-  const { participants, removeParticipant, setCurrentStep } = useApp();
+  const { event, participants, removeParticipant, setCurrentStep } = useApp();
+  const isTravel = event.type === "travel";
   const [toastVisible, setToastVisible] = useState(false);
 
   const handleSendIntake = () => {
@@ -42,6 +44,8 @@ export default function ParticipantsPage() {
             <div key={member.id} className="animate-fade-in-up">
               <ParticipantCard
                 member={member}
+                mode={isTravel ? "travel" : "dinner"}
+                flight={isTravel ? travelFlights.find(f => f.participantId === member.id) : undefined}
                 onRemove={
                   participants.length > 2
                     ? () => removeParticipant(member.id)
@@ -55,7 +59,7 @@ export default function ParticipantsPage() {
           ))}
         </div>
 
-        {/* Compatibility panel */}
+        {/* Sidebar */}
         <div className="space-y-4">
           <Card className="p-6">
             <PreferenceGraph participants={participants} />
@@ -63,7 +67,7 @@ export default function ParticipantsPage() {
 
           <Card className="p-5">
             <h3 className="text-xs font-medium uppercase tracking-[0.12em] text-white/30 mb-3">
-              Quick Summary
+              {isTravel ? "Logistics Overview" : "Quick Summary"}
             </h3>
             <div className="space-y-2 text-xs text-white/40">
               <p>
@@ -78,16 +82,43 @@ export default function ParticipantsPage() {
                 </span>{" "}
                 guest{participants.filter((p) => !p.isAuroraMember).length !== 1 && "s"} with limited data
               </p>
-              <p>
-                <span className="text-white/60 font-medium">
-                  {
-                    new Set(
-                      participants.flatMap((p) => p.preferences.dietary)
-                    ).size
-                  }
-                </span>{" "}
-                unique dietary requirements
-              </p>
+
+              {isTravel ? (
+                <>
+                  <div className="pt-2 mt-2 border-t border-white/[0.06] space-y-2">
+                    <p className="flex items-center gap-1.5">
+                      <Plane className="w-3 h-3 shrink-0" />
+                      <span className="text-white/60 font-medium">
+                        {new Set(travelFlights.map(f => f.departureAirport)).size}
+                      </span>{" "}
+                      departure airports
+                    </p>
+                    <p className="flex items-center gap-1.5">
+                      <MapPin className="w-3 h-3 shrink-0" />
+                      Staggered arrivals across 2 days
+                    </p>
+                    {participants.some(p => p.preferences.accessibility.length > 0) && (
+                      <p className="flex items-center gap-1.5 text-[#A0784A]">
+                        <Accessibility className="w-3 h-3 shrink-0" />
+                        Accessibility requirements flagged
+                      </p>
+                    )}
+                  </div>
+                  <p className="pt-2 mt-2 border-t border-white/[0.06]">
+                    <span className="text-white/60 font-medium">
+                      {new Set(participants.flatMap(p => p.preferences.dietary)).size}
+                    </span>{" "}
+                    dietary requirements carry over to on-trip dining
+                  </p>
+                </>
+              ) : (
+                <p>
+                  <span className="text-white/60 font-medium">
+                    {new Set(participants.flatMap((p) => p.preferences.dietary)).size}
+                  </span>{" "}
+                  unique dietary requirements
+                </p>
+              )}
             </div>
           </Card>
         </div>

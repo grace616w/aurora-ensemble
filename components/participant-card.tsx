@@ -4,6 +4,7 @@ import { MemberProfile } from "@/lib/types";
 import { Card } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
+import { FlightInfo } from "@/lib/types";
 import {
   Heart,
   Moon,
@@ -12,6 +13,8 @@ import {
   Clock,
   UserPlus,
   X,
+  Plane,
+  Accessibility,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -20,6 +23,8 @@ interface ParticipantCardProps {
   onRemove?: () => void;
   onSendIntake?: () => void;
   compact?: boolean;
+  mode?: "dinner" | "travel";
+  flight?: FlightInfo;
 }
 
 export function ParticipantCard({
@@ -27,6 +32,8 @@ export function ParticipantCard({
   onRemove,
   onSendIntake,
   compact = false,
+  mode = "dinner",
+  flight,
 }: ParticipantCardProps) {
   const [expanded, setExpanded] = useState(false);
   const { preferences } = member;
@@ -74,8 +81,25 @@ export function ParticipantCard({
 
           {!compact && (
             <>
-              {/* Quick tags */}
+              {/* Quick tags — context-aware */}
               <div className="flex flex-wrap gap-1.5 mt-3">
+                {mode === "travel" && flight && (
+                  <>
+                    <Badge variant={flight.flightType === "private" ? "gold" : "default"} className="text-[10px] gap-1">
+                      <Plane className="w-3 h-3" />
+                      {flight.flightType === "private" ? "Private" : flight.departureAirport}
+                    </Badge>
+                    <Badge variant="default" className="text-[10px]">
+                      {flight.departureCity.split(",")[0]}
+                    </Badge>
+                  </>
+                )}
+                {mode === "travel" && preferences.accessibility.length > 0 && (
+                  <Badge variant="warning" className="text-[10px] gap-1">
+                    <Accessibility className="w-3 h-3" />
+                    {preferences.accessibility[0]}
+                  </Badge>
+                )}
                 {preferences.dietary.length > 0 ? (
                   preferences.dietary.map((d) => (
                     <Badge key={d} variant="default" className="text-[10px]">
@@ -87,13 +111,13 @@ export function ParticipantCard({
                     no dietary restrictions
                   </Badge>
                 )}
-                {preferences.cuisineAffinities.length > 0 && (
+                {mode === "dinner" && preferences.cuisineAffinities.length > 0 && (
                   <Badge variant="default" className="text-[10px]">
                     {preferences.cuisineAffinities.slice(0, 2).join(", ")}
                   </Badge>
                 )}
                 <Badge variant="default" className="text-[10px]">
-                  {preferences.ambiancePreference}
+                  {mode === "travel" ? preferences.ambiancePreference + " lodging" : preferences.ambiancePreference}
                 </Badge>
               </div>
 
