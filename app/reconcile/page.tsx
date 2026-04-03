@@ -29,8 +29,8 @@ export default function ReconcilePage() {
 
   const result = reconciliationResult || localResult;
 
-  // Trigger fetch imperatively — called during render if not yet fetched
-  if (!result && !fetched) {
+  // Trigger fetch on client only — called during render if not yet fetched
+  if (!result && !fetched && typeof window !== "undefined") {
     setFetched(true);
     setLoading(true);
     fetch("/api/reconcile", {
