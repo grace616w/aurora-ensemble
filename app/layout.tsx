@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Manrope, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import Link from "next/link";
 import { AppProvider } from "@/lib/context";
 import { AuroraLogo } from "@/components/aurora-logo";
 
@@ -37,13 +38,13 @@ export default function RootLayout({
           {/* Header */}
           <header className="border-b border-white/[0.06] bg-[#0A0A0A]/80 backdrop-blur-md sticky top-0 z-50">
             <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
-              <div className="flex items-center gap-3">
+              <Link href="/" className="flex items-center gap-3">
                 <AuroraLogo />
                 <div className="w-px h-5 bg-white/10" />
                 <span className="text-[10px] font-light uppercase tracking-[0.1em] text-white/40">
                   Ensemble
                 </span>
-              </div>
+              </Link>
               <div className="w-8 h-8 rounded-full bg-[#A0784A]/15 text-[#A0784A] flex items-center justify-center text-xs font-medium">
                 SC
               </div>

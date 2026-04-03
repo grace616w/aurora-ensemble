@@ -22,11 +22,11 @@ export default function ReconcilePage() {
     setCurrentStep,
   } = useApp();
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(!reconciliationResult);
+  const [result, setResult] = useState(reconciliationResult);
 
-  // Fetch reconciliation data on mount (handles React strict mode correctly)
   useEffect(() => {
-    if (reconciliationResult) return;
+    if (result) return;
 
     let ignore = false;
     setLoading(true);
@@ -42,6 +42,7 @@ export default function ReconcilePage() {
       })
       .then((data) => {
         if (!ignore) {
+          setResult(data);
           setReconciliationResult(data);
           setLoading(false);
         }
@@ -53,12 +54,11 @@ export default function ReconcilePage() {
         }
       });
 
-    return () => {
-      ignore = true;
-    };
-  }, [reconciliationResult, event, participants, setReconciliationResult]);
+    return () => { ignore = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const result = reconciliationResult;
+  // result is local state, updated by useEffect above
 
   return (
     <div className="space-y-8 animate-fade-in-up">
