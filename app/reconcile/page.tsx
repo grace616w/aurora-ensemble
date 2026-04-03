@@ -28,7 +28,6 @@ export default function ReconcilePage() {
   useEffect(() => {
     if (result) return;
 
-    let ignore = false;
     setLoading(true);
 
     fetch("/api/reconcile", {
@@ -41,20 +40,14 @@ export default function ReconcilePage() {
         return res.json();
       })
       .then((data) => {
-        if (!ignore) {
-          setResult(data);
-          setReconciliationResult(data);
-          setLoading(false);
-        }
+        setResult(data);
+        setReconciliationResult(data);
+        setLoading(false);
       })
       .catch((err) => {
-        if (!ignore) {
-          console.error("Reconciliation error:", err);
-          setLoading(false);
-        }
+        console.error("Reconciliation error:", err);
+        setLoading(false);
       });
-
-    return () => { ignore = true; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
