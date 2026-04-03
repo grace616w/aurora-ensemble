@@ -90,6 +90,41 @@ export interface EventDetails {
   vibe: string;
 }
 
+// ── Travel types ──
+
+export interface FlightInfo {
+  participantId: string;
+  participantName: string;
+  departureAirport: string;
+  departureCity: string;
+  flightType: "commercial" | "private";
+  flightNumber?: string;
+  departureTime: string;
+  arrivalTime: string;
+  arrivalAirport: string;
+  transferGroup: number;
+  status: "confirmed" | "delayed" | "cancelled";
+}
+
+export interface DisruptionScenario {
+  triggerId: string;
+  triggerLabel: string;
+  affectedParticipants: string[];
+  originalArrival: string;
+  newArrival: string;
+  delayMinutes: number;
+  cause: string;
+  cascadingImpacts: { text: string; severity: "red" | "amber" | "green" | "blue" }[];
+  resolutionOptions: {
+    id: string;
+    title: string;
+    description: string;
+    confidence: number;
+    tradeoff: string;
+  }[];
+  strategistBriefing: string;
+}
+
 export type Vote = "up" | "down" | null;
 
 export interface VoteState {

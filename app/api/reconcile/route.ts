@@ -225,16 +225,17 @@ const fallbackResult: ReconciliationResult = {
 const travelFallbackResult: ReconciliationResult = {
   groupAnalysis: {
     hardConstraints: [
-      "Must accommodate: vegetarian (Elena), pescatarian (Sarah), no pork (James)",
+      "Must accommodate: vegetarian + no dairy (Priya), vegetarian (Elena), pescatarian (Sarah), no pork (James)",
       "Wheelchair-accessible ground-floor unit required (Elena)",
-      "Group overlap: May 16-19 (Marcus unavailable May 15)",
-      "Minimum 4 rooms or a multi-bedroom villa configuration",
+      "Group overlap: May 16-19 (Marcus and David unavailable May 15)",
+      "6 guests across 3 departure airports (TEB, JFK, LAX) — multi-origin flight coordination",
+      "Minimum 5 rooms or multi-bedroom villa configuration",
     ],
     softConstraints: [
-      "Sarah prefers boutique/beachfront; Marcus prefers resort with golf/marina",
-      "Elena wants spa-focused wellness; James prefers quiet",
+      "Sarah prefers boutique/beachfront; Marcus prefers resort with golf/marina; David prefers resort",
+      "Elena wants spa-focused wellness; James and Priya prefer quiet/boutique",
       "Sarah's Oura shows high stress + low recovery — system recommends wellness-oriented property",
-      "Budget delta: members at $$$$ tier, guests at $$$ — lodging split model needed",
+      "Budget delta: 3 members at $$$$ tier, 3 guests at $$$ — lodging split model needed",
     ],
     scheduleOverlap:
       "May 16–19 (3 nights confirmed for all 4). Sarah and Elena can arrive May 15 for an extra night. Marcus joins May 16.",
@@ -308,7 +309,7 @@ const travelFallbackResult: ReconciliationResult = {
   escalationReason:
     "Two issues require Lifestyle Strategist intervention: (1) Marcus cannot arrive until May 16, but the group wants 4 nights. A staggered check-in needs to be negotiated with the property — confirm they'll hold his room from May 15 or arrange a 3-night rate. (2) The budget split between members ($$$$ tier) and guests ($$$ tier) needs a tactful cost-sharing arrangement. Recommend the member covers the base booking and guests contribute a flat per-night amount.",
   escalationContext:
-    "Group of 4 (2 Aurora members + 2 guests) planning a post-fundraise decompression trip to Turks & Caicos, May 15-19. Top recommendation: Grace Bay Club (Estate Suite configuration). Key logistics: Marcus Rivera arrives May 16 (one day late) — negotiate room hold or staggered check-in. Elena Chen (guest, Sarah's partner) requires wheelchair-accessible ground-floor unit — confirm specific room assignment with property. Sarah Chen's wearable data shows elevated stress and low recovery scores — consider suggesting the wellness package add-on. Budget note: members at $$$$ tier, guests at $$$ — recommend member-subsidized booking with guest flat-rate contribution to avoid awkwardness.",
+    "Group of 6 (3 Aurora members + 3 guests) across 3 airports (TEB, JFK, LAX) planning a post-fundraise decompression trip to Turks & Caicos, May 15-19. Top recommendation: Grace Bay Club (Estate Suite configuration). Key logistics: Marcus Rivera and David Kim arrive May 16 (one day late) — negotiate room holds or staggered check-in. Elena Chen (guest, Sarah's partner) requires wheelchair-accessible ground-floor unit — confirm specific room assignment. Priya Sharma has vegetarian + no dairy requirements — verify property can accommodate across all meal periods. Sarah Chen's wearable data shows elevated stress and low recovery — suggest wellness package add-on. Budget note: 3 members at $$$$ tier, 3 guests at $$$ — recommend member-subsidized booking with guest flat-rate contribution.",
 };
 
 export async function POST(request: Request) {

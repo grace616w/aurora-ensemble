@@ -10,8 +10,11 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ArrowLeft, Shield, Clock, AlertTriangle } from "lucide-react";
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { ReconciliationResult, EventDetails, MemberProfile, Venue } from "@/lib/types";
+import { FlightTimeline } from "@/components/flight-timeline";
+import { DisruptionSimulator } from "@/components/disruption-simulator";
+import { travelFlights, disruptionScenario } from "@/lib/mock-data";
 
 type FetchState = {
   loading: boolean;
@@ -96,6 +99,8 @@ export default function ReconcilePage() {
   );
 
   const result = reconciliationResult || data;
+  const isTravel = event.type === "travel";
+  const [flightDisrupted, setFlightDisrupted] = useState(false);
 
   return (
     <div className="space-y-8 animate-fade-in-up">
@@ -168,10 +173,19 @@ export default function ReconcilePage() {
             </div>
           </Card>
 
+          {/* Flight Coordination (travel only) */}
+          {isTravel && (
+            <FlightTimeline
+              flights={travelFlights}
+              disrupted={flightDisrupted}
+              disruptedParticipants={disruptionScenario.affectedParticipants}
+            />
+          )}
+
           {/* Ranked Venues */}
           <div>
             <h2 className="text-xs font-medium uppercase tracking-[0.12em] text-white/30 mb-5">
-              Ranked Recommendations
+              {isTravel ? "Ranked Lodging" : "Ranked Recommendations"}
             </h2>
             <div className="space-y-4">
               {result.rankedVenues.map((rv) => {
@@ -191,6 +205,14 @@ export default function ReconcilePage() {
               })}
             </div>
           </div>
+
+          {/* Disruption Simulator (travel only) */}
+          {isTravel && (
+            <DisruptionSimulator
+              scenario={disruptionScenario}
+              onDisrupt={() => setFlightDisrupted(true)}
+            />
+          )}
 
           {/* Escalation Banner */}
           {result.escalationRequired && result.escalationReason && (

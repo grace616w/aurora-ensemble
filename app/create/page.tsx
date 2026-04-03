@@ -83,18 +83,6 @@ export default function CreatePage() {
             />
           </div>
 
-          <Input
-            label="Group Size"
-            id="group-size"
-            type="number"
-            value={event.groupSize}
-            onChange={(e) =>
-              setEvent({ ...event, groupSize: parseInt(e.target.value) || 0 })
-            }
-            min={2}
-            max={20}
-          />
-
           <Textarea
             label="Vibe"
             id="vibe"
