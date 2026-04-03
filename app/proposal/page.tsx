@@ -9,13 +9,14 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, ArrowRight, Check, Calendar, MapPin, Users, Sparkles } from "lucide-react";
-import { venues } from "@/lib/mock-data";
+// venues come from context.activeVenues
 import { useState, useEffect } from "react";
 
 export default function ProposalPage() {
   const {
     event,
     participants,
+    activeVenues: venues,
     reconciliationResult,
     votes,
     setVote,

@@ -44,6 +44,11 @@ export interface Venue {
   confidenceScore?: number;
   conflictsResolved?: string[];
   conflictsUnresolved?: string[];
+  // Travel-specific fields
+  venueType?: "restaurant" | "lodging";
+  nightlyRate?: string;
+  roomTypes?: string[];
+  features?: string[];
 }
 
 export interface Compromise {

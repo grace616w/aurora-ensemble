@@ -11,8 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ArrowLeft, Shield, Clock, AlertTriangle } from "lucide-react";
 import { useEffect, useReducer } from "react";
-import { venues } from "@/lib/mock-data";
-import { ReconciliationResult, EventDetails, MemberProfile } from "@/lib/types";
+import { ReconciliationResult, EventDetails, MemberProfile, Venue } from "@/lib/types";
 
 type FetchState = {
   loading: boolean;
@@ -38,6 +37,7 @@ function fetchReducer(state: FetchState, action: FetchAction): FetchState {
 function useFetchReconciliation(
   event: EventDetails,
   participants: MemberProfile[],
+  venues: Venue[],
   existingResult: ReconciliationResult | null,
   onResult: (data: ReconciliationResult) => void
 ) {
@@ -81,6 +81,7 @@ export default function ReconcilePage() {
   const {
     event,
     participants,
+    activeVenues,
     reconciliationResult,
     setReconciliationResult,
     setCurrentStep,
@@ -89,6 +90,7 @@ export default function ReconcilePage() {
   const { loading, data } = useFetchReconciliation(
     event,
     participants,
+    activeVenues,
     reconciliationResult,
     setReconciliationResult
   );
@@ -108,7 +110,7 @@ export default function ReconcilePage() {
         </h1>
         <p className="text-sm text-white/40">
           Analyzing {participants.length} preference profiles across{" "}
-          {venues.length} venues
+          {activeVenues.length} venues
         </p>
       </div>
 
@@ -173,7 +175,7 @@ export default function ReconcilePage() {
             </h2>
             <div className="space-y-4">
               {result.rankedVenues.map((rv) => {
-                const venue = venues.find((v) => v.id === rv.venueId);
+                const venue = activeVenues.find((v) => v.id === rv.venueId);
                 if (!venue) return null;
                 return (
                   <div key={rv.venueId} className="animate-fade-in-up">

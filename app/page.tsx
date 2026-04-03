@@ -57,7 +57,7 @@ const features = [
 ];
 
 export default function DashboardPage() {
-  const { setCurrentStep } = useApp();
+  const { setCurrentStep, loadScenario } = useApp();
 
   return (
     <div className="space-y-16">
@@ -80,7 +80,7 @@ export default function DashboardPage() {
           </p>
         </div>
         <div>
-          <Link href="/create" onClick={() => setCurrentStep(1)}>
+          <Link href="/create" onClick={() => loadScenario("dinner")}>
             <Button size="lg" type="button">
               Start New Experience
               <ArrowRight className="w-4 h-4" />
@@ -136,16 +136,17 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Demo scenario */}
-      <div className="animate-fade-in animate-delay-300">
+      {/* Demo scenarios */}
+      <div className="animate-fade-in animate-delay-300 space-y-4">
+        <h2 className="text-xs font-medium uppercase tracking-[0.12em] text-white/30">
+          Demo Scenarios
+        </h2>
+
         <Card className="p-6">
           <div className="flex flex-col sm:flex-row items-start justify-between gap-4">
             <div>
-              <h2 className="text-xs font-medium uppercase tracking-[0.12em] text-white/30 mb-2">
-                Demo Scenario
-              </h2>
               <h3 className="text-base font-medium text-[#F5F5F5] mb-2">
-                Series B Celebration Dinner — NYC, April 11
+                Series B Celebration Dinner — NYC
               </h3>
               <p className="text-sm text-white/40 max-w-2xl leading-relaxed">
                 4 guests. A vegan, a pescatarian, a steakhouse loyalist, and an
@@ -154,9 +155,31 @@ export default function DashboardPage() {
                 needs a human touch — in seconds.
               </p>
             </div>
-            <Link href="/create" onClick={() => setCurrentStep(1)}>
+            <Link href="/create" onClick={() => loadScenario("dinner")}>
               <Button variant="secondary" type="button" className="shrink-0">
-                Try it
+                Try dinner
+                <ArrowRight className="w-4 h-4" />
+              </Button>
+            </Link>
+          </div>
+        </Card>
+
+        <Card className="p-6">
+          <div className="flex flex-col sm:flex-row items-start justify-between gap-4">
+            <div>
+              <h3 className="text-base font-medium text-[#F5F5F5] mb-2">
+                Post-Fundraise Reset — Turks &amp; Caicos
+              </h3>
+              <p className="text-sm text-white/40 max-w-2xl leading-relaxed">
+                4 travelers. One flies private, one needs wheelchair access, two
+                aren&apos;t Aurora members. Staggered arrivals, budget delta between
+                members and guests, and competing lodging preferences (boutique vs.
+                resort). Ensemble coordinates flights, lodging, and the handoff.
+              </p>
+            </div>
+            <Link href="/create" onClick={() => loadScenario("travel")}>
+              <Button variant="secondary" type="button" className="shrink-0">
+                Try travel
                 <ArrowRight className="w-4 h-4" />
               </Button>
             </Link>

@@ -222,6 +222,95 @@ const fallbackResult: ReconciliationResult = {
     "Group of 4 (3 Aurora members + 1 guest) celebrating a Series B close. Schedule constraint: Marcus arrives at 20:00, Anika departs by 22:30, creating a 2.5hr window. Top recommendation is Shukette (Mediterranean, SoHo) with private dining — confirm they can execute a complete tasting menu experience within 2.5 hours. Alternative: negotiate with Nami Nori for an abbreviated omakase format. Secondary concern: verify Anika's vegan/GF needs can be met with advance notice at the selected venue. James Whitfield (guest, not Aurora member) has a minimal preference profile — may benefit from intake questionnaire completion before final booking.",
 };
 
+const travelFallbackResult: ReconciliationResult = {
+  groupAnalysis: {
+    hardConstraints: [
+      "Must accommodate: vegetarian (Elena), pescatarian (Sarah), no pork (James)",
+      "Wheelchair-accessible ground-floor unit required (Elena)",
+      "Group overlap: May 16-19 (Marcus unavailable May 15)",
+      "Minimum 4 rooms or a multi-bedroom villa configuration",
+    ],
+    softConstraints: [
+      "Sarah prefers boutique/beachfront; Marcus prefers resort with golf/marina",
+      "Elena wants spa-focused wellness; James prefers quiet",
+      "Sarah's Oura shows high stress + low recovery — system recommends wellness-oriented property",
+      "Budget delta: members at $$$$ tier, guests at $$$ — lodging split model needed",
+    ],
+    scheduleOverlap:
+      "May 16–19 (3 nights confirmed for all 4). Sarah and Elena can arrive May 15 for an extra night. Marcus joins May 16.",
+    primaryTension:
+      "Property type split — Sarah wants boutique beachfront, Marcus wants full-service resort with golf. Elena's accessibility requirement eliminates several villa options.",
+  },
+  rankedVenues: [
+    {
+      venueId: "lodge-3",
+      rank: 1,
+      confidenceScore: 87,
+      reasoning:
+        "Grace Bay Club is the strongest fit for this group. It offers the resort amenities Marcus wants (golf nearby, multiple restaurants) while being on Grace Bay Beach for Sarah. The Estate Suites are ground-floor accessible for Elena. Multiple on-site restaurants handle all dietary requirements. Aurora Edge perks include suite upgrades and private cabanas — ideal for a decompression trip.",
+      compromises: [
+        { participantId: "sarah-chen", participantName: "Sarah Chen", compromise: "Not the boutique feel she prefers, but the Estate section is intimate and separate from the main resort" },
+        { participantId: "elena-chen", participantName: "Elena Chen", compromise: "Resort rather than spa-focused, but the spa is excellent and ground-floor access confirmed" },
+      ],
+      unresolvable: [],
+    },
+    {
+      venueId: "lodge-2",
+      rank: 2,
+      confidenceScore: 82,
+      reasoning:
+        "COMO Parrot Cay is a private island with world-class wellness — perfect for Sarah's high-stress recovery needs and Elena's spa preference. The farm-to-table dining handles all dietary constraints. However, the private island format means no golf for Marcus, and the Two-Bedroom Beach Houses may not accommodate 4 guests without booking two units.",
+      compromises: [
+        { participantId: "marcus-rivera", participantName: "Marcus Rivera", compromise: "No golf, no marina — limited activity options beyond wellness and water sports" },
+        { participantId: "james-whitfield", participantName: "James Whitfield", compromise: "Private island may feel isolating; limited restaurant variety" },
+      ],
+      unresolvable: [],
+    },
+    {
+      venueId: "lodge-1",
+      rank: 3,
+      confidenceScore: 78,
+      reasoning:
+        "Amanyara is the most luxurious option with extraordinary privacy and a pristine reef. The Pool Villas offer ground-floor access for Elena. However, it's located on the remote Northwest Point — 45 minutes from the airport and far from any town. The $3,200/night rate creates a significant budget gap for the non-member guests.",
+      compromises: [
+        { participantId: "marcus-rivera", participantName: "Marcus Rivera", compromise: "Remote location, no golf, limited nightlife or social energy" },
+        { participantId: "james-whitfield", participantName: "James Whitfield", compromise: "At $3,200/night, significantly above guest budget tier — cost-sharing model needed" },
+        { participantId: "elena-chen", participantName: "Elena Chen", compromise: "Remote location makes medical access more difficult if needed" },
+      ],
+      unresolvable: ["Budget disparity: $3,200/night exceeds guest tier by ~3x. Requires member to subsidize or split-rate arrangement"],
+    },
+    {
+      venueId: "lodge-4",
+      rank: 4,
+      confidenceScore: 62,
+      reasoning:
+        "The Shore Club on Long Bay has Nobu for excellent Japanese/pescatarian dining and a social energy Marcus would enjoy. However, the 'lively' ambiance directly conflicts with James's quiet preference and the decompression vibe. It's not available until May 16, which works for the group overlap but eliminates Sarah and Elena's early arrival.",
+      compromises: [
+        { participantId: "james-whitfield", participantName: "James Whitfield", compromise: "Lively atmosphere directly conflicts with quiet preference" },
+        { participantId: "sarah-chen", participantName: "Sarah Chen", compromise: "Party-adjacent energy doesn't match decompression vibe; Long Bay isn't beachfront in the same way" },
+      ],
+      unresolvable: ["Ambiance mismatch with the stated 'decompression' trip purpose"],
+    },
+    {
+      venueId: "lodge-5",
+      rank: 5,
+      confidenceScore: 52,
+      reasoning:
+        "Wymara is a solid boutique option on Grace Bay at $950/night — the most budget-friendly for the group. However, the $$$ tier falls below the members' minimum, room variety is limited, and the intimate scale may not have enough ground-floor accessible inventory for Elena.",
+      compromises: [
+        { participantId: "sarah-chen", participantName: "Sarah Chen", compromise: "Below her $$$$ price floor — may feel like a downgrade" },
+        { participantId: "marcus-rivera", participantName: "Marcus Rivera", compromise: "No resort amenities, no golf, limited dining options" },
+      ],
+      unresolvable: ["Below members' $$$$ price floor", "Accessibility confirmation needed — limited ground-floor inventory"],
+    },
+  ],
+  escalationRequired: true,
+  escalationReason:
+    "Two issues require Lifestyle Strategist intervention: (1) Marcus cannot arrive until May 16, but the group wants 4 nights. A staggered check-in needs to be negotiated with the property — confirm they'll hold his room from May 15 or arrange a 3-night rate. (2) The budget split between members ($$$$ tier) and guests ($$$ tier) needs a tactful cost-sharing arrangement. Recommend the member covers the base booking and guests contribute a flat per-night amount.",
+  escalationContext:
+    "Group of 4 (2 Aurora members + 2 guests) planning a post-fundraise decompression trip to Turks & Caicos, May 15-19. Top recommendation: Grace Bay Club (Estate Suite configuration). Key logistics: Marcus Rivera arrives May 16 (one day late) — negotiate room hold or staggered check-in. Elena Chen (guest, Sarah's partner) requires wheelchair-accessible ground-floor unit — confirm specific room assignment with property. Sarah Chen's wearable data shows elevated stress and low recovery scores — consider suggesting the wellness package add-on. Budget note: members at $$$$ tier, guests at $$$ — recommend member-subsidized booking with guest flat-rate contribution to avoid awkwardness.",
+};
+
 export async function POST(request: Request) {
   try {
     const { event, participants, venues } = await request.json();
@@ -233,7 +322,9 @@ export async function POST(request: Request) {
       // Return fallback result when no API key is set
       // Simulate processing time
       await new Promise((resolve) => setTimeout(resolve, 2000));
-      return NextResponse.json(fallbackResult);
+      // Choose fallback based on event type
+      const isTravel = event?.type === "travel" || venues?.some?.((v: Venue) => v.venueType === "lodging");
+      return NextResponse.json(isTravel ? travelFallbackResult : fallbackResult);
     }
 
     const client = new Anthropic({ apiKey });

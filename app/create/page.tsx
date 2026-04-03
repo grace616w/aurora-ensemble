@@ -73,13 +73,13 @@ export default function CreatePage() {
               }
             />
             <Input
-              label="Time Window"
+              label={event.type === "travel" ? "Duration" : "Time Window"}
               id="time"
               value={event.timeWindow}
               onChange={(e) =>
                 setEvent({ ...event, timeWindow: e.target.value })
               }
-              placeholder="e.g. 19:00 - 23:00"
+              placeholder={event.type === "travel" ? "e.g. May 15-19 (4 nights)" : "e.g. 19:00 - 23:00"}
             />
           </div>
 

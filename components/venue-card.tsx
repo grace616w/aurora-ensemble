@@ -57,13 +57,24 @@ export function VenueCard({ venue, ranking, children }: VenueCardProps) {
               {venue.neighborhood}
             </span>
             <span className="w-1 h-1 rounded-full bg-white/20" />
-            <span>{venue.priceRange}</span>
+            <span>{venue.nightlyRate || venue.priceRange}</span>
             <span className="w-1 h-1 rounded-full bg-white/20" />
             <span className="flex items-center gap-1">
               <Users className="w-3 h-3" />
               Up to {venue.capacity}
             </span>
           </div>
+
+          {/* Lodging-specific: room types and features */}
+          {venue.venueType === "lodging" && venue.features && (
+            <div className="flex flex-wrap gap-1.5 mt-2">
+              {venue.features.map((f) => (
+                <span key={f} className="text-[10px] text-white/35 bg-white/5 px-2 py-0.5 rounded-full">
+                  {f}
+                </span>
+              ))}
+            </div>
+          )}
 
           {/* Dietary accommodations */}
           <div className="flex flex-wrap gap-1.5 mt-3">

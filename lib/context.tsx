@@ -6,8 +6,16 @@ import {
   MemberProfile,
   ReconciliationResult,
   VoteState,
+  Venue,
 } from "./types";
-import { defaultEventDetails, members as allMembers } from "./mock-data";
+import {
+  defaultEventDetails,
+  members as allMembers,
+  venues as dinnerVenues,
+  travelEventDetails,
+  travelMembers,
+  lodgings,
+} from "./mock-data";
 
 interface AppState {
   event: EventDetails;
@@ -18,10 +26,12 @@ interface AppState {
   removeParticipant: (id: string) => void;
   reconciliationResult: ReconciliationResult | null;
   setReconciliationResult: (result: ReconciliationResult | null) => void;
+  activeVenues: Venue[];
   votes: VoteState;
   setVote: (participantId: string, venueId: string, vote: "up" | "down" | null) => void;
   currentStep: number;
   setCurrentStep: (step: number) => void;
+  loadScenario: (type: "dinner" | "travel") => void;
 }
 
 const AppContext = createContext<AppState | null>(null);
@@ -29,6 +39,7 @@ const AppContext = createContext<AppState | null>(null);
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [event, setEvent] = useState<EventDetails>(defaultEventDetails);
   const [participants, setParticipants] = useState<MemberProfile[]>(allMembers);
+  const [activeVenues, setActiveVenues] = useState<Venue[]>(dinnerVenues);
   const [reconciliationResult, setReconciliationResult] =
     useState<ReconciliationResult | null>(null);
   const [votes, setVotes] = useState<VoteState>({});
@@ -58,6 +69,21 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     []
   );
 
+  const loadScenario = useCallback((type: "dinner" | "travel") => {
+    setReconciliationResult(null);
+    setVotes({});
+    setCurrentStep(1);
+    if (type === "travel") {
+      setEvent(travelEventDetails);
+      setParticipants(travelMembers);
+      setActiveVenues(lodgings);
+    } else {
+      setEvent(defaultEventDetails);
+      setParticipants(allMembers);
+      setActiveVenues(dinnerVenues);
+    }
+  }, []);
+
   return (
     <AppContext.Provider
       value={{
@@ -69,10 +95,12 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         removeParticipant,
         reconciliationResult,
         setReconciliationResult,
+        activeVenues,
         votes,
         setVote,
         currentStep,
         setCurrentStep,
+        loadScenario,
       }}
     >
       {children}
