@@ -45,7 +45,7 @@ export interface Venue {
   conflictsResolved?: string[];
   conflictsUnresolved?: string[];
   // Travel-specific fields
-  venueType?: "restaurant" | "lodging";
+  venueType?: "restaurant" | "lodging" | "experience" | "wellness";
   nightlyRate?: string;
   roomTypes?: string[];
   features?: string[];

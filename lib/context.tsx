@@ -15,6 +15,12 @@ import {
   travelEventDetails,
   travelMembers,
   lodgings,
+  experienceEventDetails,
+  experienceMembers,
+  experienceVenues,
+  wellnessEventDetails,
+  wellnessMembers,
+  wellnessVenues,
 } from "./mock-data";
 
 interface AppState {
@@ -31,7 +37,7 @@ interface AppState {
   setVote: (participantId: string, venueId: string, vote: "up" | "down" | null) => void;
   currentStep: number;
   setCurrentStep: (step: number) => void;
-  loadScenario: (type: "dinner" | "travel") => void;
+  loadScenario: (type: "dinner" | "travel" | "experience" | "wellness") => void;
 }
 
 const AppContext = createContext<AppState | null>(null);
@@ -69,7 +75,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     []
   );
 
-  const loadScenario = useCallback((type: "dinner" | "travel") => {
+  const loadScenario = useCallback((type: "dinner" | "travel" | "experience" | "wellness") => {
     setReconciliationResult(null);
     setVotes({});
     setCurrentStep(1);
@@ -77,6 +83,14 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       setEvent(travelEventDetails);
       setParticipants(travelMembers);
       setActiveVenues(lodgings);
+    } else if (type === "experience") {
+      setEvent(experienceEventDetails);
+      setParticipants(experienceMembers);
+      setActiveVenues(experienceVenues);
+    } else if (type === "wellness") {
+      setEvent(wellnessEventDetails);
+      setParticipants(wellnessMembers);
+      setActiveVenues(wellnessVenues);
     } else {
       setEvent(defaultEventDetails);
       setParticipants(allMembers);

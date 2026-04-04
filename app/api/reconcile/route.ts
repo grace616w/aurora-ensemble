@@ -312,6 +312,316 @@ const travelFallbackResult: ReconciliationResult = {
     "Group of 6 (3 Aurora members + 3 guests) across 3 airports (TEB, JFK, LAX) planning a post-fundraise decompression trip to Turks & Caicos, May 15-19. Top recommendation: Grace Bay Club (Estate Suite configuration). Key logistics: Marcus Rivera and David Kim arrive May 16 (one day late) — negotiate room holds or staggered check-in. Elena Chen (guest, Sarah's partner) requires wheelchair-accessible ground-floor unit — confirm specific room assignment. Priya Sharma has vegetarian + no dairy requirements — verify property can accommodate across all meal periods. Sarah Chen's wearable data shows elevated stress and low recovery — suggest wellness package add-on. Budget note: 3 members at $$$$ tier, 3 guests at $$$ — recommend member-subsidized booking with guest flat-rate contribution.",
 };
 
+const experienceFallbackResult: ReconciliationResult = {
+  groupAnalysis: {
+    hardConstraints: [
+      "Must accommodate: vegetarian (Lila), pescatarian + no shellfish (Sarah), no pork (James)",
+      "All participants available 15:00-18:00 (3hr overlap — James departs by 18:00, Marcus arrives at 15:00)",
+      "Minimum 4-person capacity with semi-private or private setting",
+      "Walking accessibility required — Lila prefers minimal transit between venues",
+    ],
+    softConstraints: [
+      "Sarah and Lila prefer intimate/quiet settings; Marcus prefers lively atmosphere",
+      "Lila has deep contemporary art knowledge — generic gallery tours will feel surface-level for her",
+      "James has limited art background — experience should be accessible, not intimidating",
+      "Wine component important for Sarah and Marcus; Lila prefers natural wines specifically",
+      "Neighborhood cluster: SoHo/Chelsea preferred by 3 of 4 participants",
+    ],
+    scheduleOverlap:
+      "15:00–18:00 (3-hour window). Marcus cannot arrive before 15:00, James must leave by 18:00. Sarah and Lila available from 14:00 — could do a pre-experience gallery walk.",
+    primaryTension:
+      "Expertise gap — Lila is a professional art collector who will find standard gallery tours superficial, while James has minimal art exposure and may feel alienated by insider-level discourse. The experience needs to engage both without condescending to either.",
+  },
+  rankedVenues: [
+    {
+      venueId: "exp-1",
+      rank: 1,
+      confidenceScore: 91,
+      reasoning:
+        "The Curator's Eye in SoHo is the strongest fit. The private viewing format with a dedicated curator allows the tour to be calibrated to the group's mixed expertise levels — Lila can engage with the curator on technique and provenance while James gets accessible context. The sommelier-led wine pairing bridges the art and social elements. SoHo location is in everyone's preferred zone. Aurora Edge perks (after-hours access, private collection) will make Lila feel this is a serious art experience, not a tourist activity.",
+      compromises: [
+        {
+          participantId: "marcus-rivera",
+          participantName: "Marcus Rivera",
+          compromise:
+            "Intimate gallery setting is quieter than his lively preference, but the wine pairing adds social energy",
+        },
+        {
+          participantId: "james-whitfield",
+          participantName: "James Whitfield",
+          compromise:
+            "Art-heavy experience may feel outside his comfort zone, but the private format means no pressure to perform knowledge",
+        },
+      ],
+      unresolvable: [],
+    },
+    {
+      venueId: "exp-5",
+      rank: 2,
+      confidenceScore: 85,
+      reasoning:
+        "The Glass House offers a unique rooftop sculpture garden with champagne tasting — the outdoor setting and live glassblowing demo make it experiential rather than purely intellectual, which helps James engage. The champagne tasting is universally appealing. Aurora Edge perks include a private artist studio visit that Lila would find exceptional. Chelsea location works for the group.",
+      compromises: [
+        {
+          participantId: "lila-okafor",
+          participantName: "Lila Okafor",
+          compromise:
+            "Sculpture focus is less aligned with her contemporary art collecting interests than a painting/mixed-media gallery",
+        },
+        {
+          participantId: "marcus-rivera",
+          participantName: "Marcus Rivera",
+          compromise:
+            "15:00 start is the earliest he can arrive — no buffer time if running late",
+        },
+      ],
+      unresolvable: [],
+    },
+    {
+      venueId: "exp-3",
+      rank: 3,
+      confidenceScore: 78,
+      reasoning:
+        "Atelier Lumière's immersive 360-degree projections are the most universally accessible format — no art expertise required to enjoy, which eliminates the expertise-gap tension entirely. The lively atmosphere matches Marcus's preference. However, the non-private format means the group is mixed with other attendees, and Lila may find immersive digital art less substantive than traditional gallery work.",
+      compromises: [
+        {
+          participantId: "lila-okafor",
+          participantName: "Lila Okafor",
+          compromise:
+            "Immersive digital art may feel commercially oriented for a serious collector — less depth than a curated gallery",
+        },
+        {
+          participantId: "sarah-chen",
+          participantName: "Sarah Chen",
+          compromise:
+            "No private room — the experience is shared with other attendees, which conflicts with her intimate preference",
+        },
+        {
+          participantId: "james-whitfield",
+          participantName: "James Whitfield",
+          compromise:
+            "Tribeca location is outside his neutral zone, and the lively atmosphere conflicts with his quiet preference",
+        },
+      ],
+      unresolvable: [],
+    },
+    {
+      venueId: "exp-2",
+      rank: 4,
+      confidenceScore: 68,
+      reasoning:
+        "Vinoteca Privata leans heavily into wine over art — the private cellar tour and rare vintages would appeal strongly to Sarah and Marcus, and the food pairing handles all dietary needs. However, this is primarily a wine experience, not an art experience, which underdelivers on the stated purpose. Lila specifically came for art, and James has no particular wine interest.",
+      compromises: [
+        {
+          participantId: "lila-okafor",
+          participantName: "Lila Okafor",
+          compromise:
+            "Wine-primary experience doesn't match her expectation of an art-focused afternoon",
+        },
+        {
+          participantId: "james-whitfield",
+          participantName: "James Whitfield",
+          compromise:
+            "Limited wine knowledge may make the sommelier-led format feel exclusionary",
+        },
+      ],
+      unresolvable: [],
+    },
+    {
+      venueId: "exp-4",
+      rank: 5,
+      confidenceScore: 58,
+      reasoning:
+        "Galerie Noir offers fine art photography with natural wine — Lila's natural wine preference is met here, and the private viewing room is intimate. However, the $$$ price tier is below the group's standard, the 6-person capacity is tight, and the photography-only focus may feel narrow for a 3-hour afternoon. The quiet ambiance works for James but creates low energy for Marcus.",
+      compromises: [
+        {
+          participantId: "marcus-rivera",
+          participantName: "Marcus Rivera",
+          compromise:
+            "Quiet photography gallery is the opposite of his lively preference — may feel subdued",
+        },
+        {
+          participantId: "sarah-chen",
+          participantName: "Sarah Chen",
+          compromise:
+            "Below her $$$$ price floor — the experience may feel understated for the occasion",
+        },
+      ],
+      unresolvable: [
+        "Advance booking for The Curator's Eye private collection requires 10-day notice — booking deadline is April 8, cutting it close for an April 18 event",
+      ],
+    },
+  ],
+  escalationRequired: true,
+  escalationReason:
+    "The Curator's Eye (top recommendation) requires 10 business days advance notice for after-hours private collection access. With the event on April 18, the booking must be confirmed by April 8 at the latest. A Lifestyle Strategist should contact the gallery immediately to secure the reservation and confirm the sommelier availability for the wine pairing component.",
+  escalationContext:
+    "Group of 4 (2 Aurora members + 2 guests) for a private art and wine afternoon in SoHo/Chelsea, April 18. Top recommendation: The Curator's Eye (private gallery tour with sommelier-led pairing). Key tension: expertise gap between Lila Okafor (professional collector) and James Whitfield (art novice) — curator must be briefed to calibrate the tour. Booking deadline: April 8 for after-hours access. Dietary: vegetarian (Lila), pescatarian/no shellfish (Sarah), no pork (James). Marcus arrives at 15:00 — confirm experience can accommodate staggered start or plan a 14:00 pre-walk for Sarah and Lila. Wine note: Lila prefers natural wines — confirm sommelier can accommodate.",
+};
+
+const wellnessFallbackResult: ReconciliationResult = {
+  groupAnalysis: {
+    hardConstraints: [
+      "Must accommodate: vegan + gluten-free (Anika), pescatarian + no shellfish (Sarah), vegetarian (Elena)",
+      "Wheelchair-accessible ground-floor unit required (Elena)",
+      "3-day retreat format: Friday April 25 through Sunday April 27",
+      "Sarah's Oura data shows critically high stress (sleepScore 58, recoveryScore 45) — recovery-focused programming essential",
+      "Minimum capacity for 4 guests with private or semi-private rooms",
+    ],
+    softConstraints: [
+      "Sarah and Anika prefer spa-focused/boutique; Tom prefers resort with fitness options",
+      "Tom wants access to structured fitness programming (HIIT, strength training)",
+      "Anika has Ayurvedic dietary preferences — ideally the retreat offers Ayurvedic-aligned menus",
+      "Elena wants spa-focused experience but needs ground-floor accessibility confirmed",
+      "Budget delta: 3 members at $$$$ tier, 1 guest (Elena) at $$$ — cost-sharing consideration",
+    ],
+    scheduleOverlap:
+      "All 4 available April 25-27 (full 3-day window). No blocked dates. Straightforward scheduling.",
+    primaryTension:
+      "Programming split — Sarah's wearable data strongly indicates she needs low-intensity recovery (gentle yoga, meditation, sleep optimization), but Tom wants high-intensity fitness programming (HIIT, CrossFit). A venue that leans too far toward either extreme will leave one participant underserved.",
+  },
+  rankedVenues: [
+    {
+      venueId: "well-1",
+      rank: 1,
+      confidenceScore: 90,
+      reasoning:
+        "Miraval Hudson Valley is the strongest fit. It offers both gentle recovery programming (yoga, meditation, sound healing) for Sarah's high-stress needs and active options (equine therapy, hiking) that satisfy Tom's desire for physical engagement without being purely high-intensity. The farm-to-table dining accommodates all dietary requirements including Anika's vegan/gluten-free. Aurora Edge perks include a private yoga session and dedicated wellness concierge who can customize each participant's schedule. Accessible rooms are available on the ground floor for Elena.",
+      compromises: [
+        {
+          participantId: "tom-nakamura",
+          participantName: "Tom Nakamura",
+          compromise:
+            "No dedicated HIIT or CrossFit programming — fitness options are more wellness-oriented (hiking, equine therapy) than performance-focused",
+        },
+        {
+          participantId: "elena-chen",
+          participantName: "Elena Chen",
+          compromise:
+            "Equine therapy and some outdoor activities may not be fully accessible — programming will need to be customized",
+        },
+      ],
+      unresolvable: [],
+    },
+    {
+      venueId: "well-3",
+      rank: 2,
+      confidenceScore: 84,
+      reasoning:
+        "CIVANA Wellness in Rhinebeck offers cutting-edge recovery modalities (cryotherapy, IV therapy, breathwork) that directly address Sarah's recovery needs. The private chef can handle all dietary constraints including Anika's Ayurvedic preferences. The boutique format feels exclusive and intimate. However, the 6-person capacity is tight, and the focus on biohacking-style wellness may feel too clinical for Elena who simply wants a relaxing spa experience.",
+      compromises: [
+        {
+          participantId: "elena-chen",
+          participantName: "Elena Chen",
+          compromise:
+            "Biohacking-focused wellness may feel overly clinical; she prefers traditional spa treatments. Ground-floor accessibility needs confirmation.",
+        },
+        {
+          participantId: "tom-nakamura",
+          participantName: "Tom Nakamura",
+          compromise:
+            "Boutique format lacks resort-scale fitness facilities — no gym, no structured training programs",
+        },
+      ],
+      unresolvable: [],
+    },
+    {
+      venueId: "well-2",
+      rank: 3,
+      confidenceScore: 76,
+      reasoning:
+        "Mohonk Mountain House offers the broadest range of activities — spa, hiking, lake activities, rock climbing, fitness center — which gives Tom the physical intensity he wants while Sarah can focus on spa and gentle walks. The resort scale means more dining options for varied dietary needs. However, the historic property may have limited ground-floor accessible rooms for Elena, and the resort atmosphere is less intimate than Sarah's boutique preference.",
+      compromises: [
+        {
+          participantId: "sarah-chen",
+          participantName: "Sarah Chen",
+          compromise:
+            "Resort scale is less intimate than her boutique preference — may feel more like a hotel than a retreat",
+        },
+        {
+          participantId: "anika-patel",
+          participantName: "Anika Patel",
+          compromise:
+            "Vegan options listed as 'options' rather than dedicated vegan menu — may need advance coordination with kitchen",
+        },
+        {
+          participantId: "elena-chen",
+          participantName: "Elena Chen",
+          compromise:
+            "Historic property — wheelchair accessibility in a 19th-century building needs specific room confirmation",
+        },
+      ],
+      unresolvable: [],
+    },
+    {
+      venueId: "well-4",
+      rank: 4,
+      confidenceScore: 62,
+      reasoning:
+        "The Emerson Resort & Spa offers a solid boutique spa experience at the $$$ tier — more budget-friendly and relaxed. The meditation garden and nature walks suit Sarah's recovery needs. However, it falls below the members' $$$$ price floor, has limited programming variety, and the 'gluten-free adaptable' note for Anika suggests less confidence in handling complex dietary requirements.",
+      compromises: [
+        {
+          participantId: "sarah-chen",
+          participantName: "Sarah Chen",
+          compromise:
+            "Below her $$$$ price floor — may feel like a downgrade from the premium retreat experience expected",
+        },
+        {
+          participantId: "tom-nakamura",
+          participantName: "Tom Nakamura",
+          compromise:
+            "Minimal fitness facilities — yoga and nature walks only, no structured training",
+        },
+        {
+          participantId: "anika-patel",
+          participantName: "Anika Patel",
+          compromise:
+            "'Gluten-free adaptable' suggests limited dedicated GF options — risk for someone with strict requirements",
+        },
+      ],
+      unresolvable: [
+        "Below the members' $$$$ price floor — may not match the premium expectation for an Aurora-coordinated retreat",
+      ],
+    },
+    {
+      venueId: "well-5",
+      rank: 5,
+      confidenceScore: 42,
+      reasoning:
+        "The Lodge at Woodstock is a high-intensity fitness retreat (HIIT, CrossFit, cold plunge) — Tom's ideal venue. However, this directly contradicts Sarah's recovery needs: her Oura data shows critically low recovery (45) and high stress, making high-intensity programming potentially harmful. The performance nutrition focus may not align with Anika's vegan/gluten-free needs, and the lively atmosphere conflicts with the stated decompression vibe.",
+      compromises: [
+        {
+          participantId: "sarah-chen",
+          participantName: "Sarah Chen",
+          compromise:
+            "High-intensity programming is contraindicated by her wearable data — recoveryScore 45 means she needs rest, not HIIT",
+        },
+        {
+          participantId: "anika-patel",
+          participantName: "Anika Patel",
+          compromise:
+            "'Vegan adaptable' on a performance nutrition menu suggests limited plant-forward options — protein shakes instead of proper vegan cuisine",
+        },
+        {
+          participantId: "elena-chen",
+          participantName: "Elena Chen",
+          compromise:
+            "Fitness-focused programming is largely inaccessible for wheelchair users; spa-focused preference unmet",
+        },
+      ],
+      unresolvable: [
+        "Sarah's wearable data contraindicates high-intensity activity — this venue's core programming could worsen her recovery trajectory",
+        "Lively/fitness atmosphere conflicts with the stated 'decompression' purpose of the retreat",
+      ],
+    },
+  ],
+  escalationRequired: true,
+  escalationReason:
+    "Sarah's Oura ring data shows critically elevated stress markers (sleep score 58, recovery score 45). The top recommendation (Miraval) should be booked with a recovery-focused program track for Sarah — specifically gentle yoga, sleep optimization, and no high-intensity activities. However, Tom has explicitly requested structured fitness programming. A Lifestyle Strategist should negotiate a split programming schedule: recovery track for Sarah and Elena, moderate fitness track for Tom, with Anika able to float between both. This customization requires direct coordination with Miraval's wellness concierge.",
+  escalationContext:
+    "Group of 4 (3 Aurora members + 1 guest) for a 3-day recovery retreat in Hudson Valley, April 25-27. Top recommendation: Miraval Hudson Valley (wellness resort with broad programming). Critical health flag: Sarah Chen's Oura data shows recovery score 45 and sleep score 58 — she needs recovery-focused programming, not general wellness. Programming split: Sarah needs gentle recovery, Tom wants fitness intensity — recommend split-track scheduling. Elena Chen (guest, wheelchair user) needs ground-floor room confirmation and accessible programming options. Anika Patel requires strict vegan + gluten-free meals — confirm with kitchen for all 3 days. Budget note: Elena at $$$ tier vs. 3 members at $$$$ — recommend member-subsidized booking or group rate negotiation.",
+};
+
 export async function POST(request: Request) {
   try {
     const { event, participants, venues } = await request.json();
@@ -324,8 +634,12 @@ export async function POST(request: Request) {
       // Simulate processing time
       await new Promise((resolve) => setTimeout(resolve, 2000));
       // Choose fallback based on event type
-      const isTravel = event?.type === "travel" || venues?.some?.((v: Venue) => v.venueType === "lodging");
-      return NextResponse.json(isTravel ? travelFallbackResult : fallbackResult);
+      const eventType = event?.type;
+      const fallback = eventType === "travel" ? travelFallbackResult
+        : eventType === "experience" ? experienceFallbackResult
+        : eventType === "wellness" ? wellnessFallbackResult
+        : fallbackResult;
+      return NextResponse.json(fallback);
     }
 
     const client = new Anthropic({ apiKey });

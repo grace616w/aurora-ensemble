@@ -85,12 +85,7 @@ export default function CreatePage() {
               options={eventTypes}
               value={event.type}
               onChange={(e) => {
-                const newType = e.target.value as EventType;
-                if (newType === "travel" || newType === "dinner") {
-                  loadScenario(newType);
-                } else {
-                  setEvent({ ...event, type: newType });
-                }
+                loadScenario(e.target.value as EventType);
               }}
             />
             <Input

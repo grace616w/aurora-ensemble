@@ -23,7 +23,7 @@ interface ParticipantCardProps {
   onRemove?: () => void;
   onSendIntake?: () => void;
   compact?: boolean;
-  mode?: "dinner" | "travel";
+  mode?: "dinner" | "travel" | "experience" | "wellness";
   flight?: FlightInfo;
 }
 
@@ -94,10 +94,38 @@ export function ParticipantCard({
                     </Badge>
                   </>
                 )}
-                {mode === "travel" && preferences.accessibility.length > 0 && (
+                {(mode === "travel" || mode === "wellness") && preferences.accessibility.length > 0 && (
                   <Badge variant="warning" className="text-[10px] gap-1">
                     <Accessibility className="w-3 h-3" />
                     {preferences.accessibility[0]}
+                  </Badge>
+                )}
+                {mode === "experience" && preferences.cuisineAffinities.length > 0 && (
+                  <Badge variant="default" className="text-[10px]">
+                    {preferences.cuisineAffinities.slice(0, 2).join(", ")}
+                  </Badge>
+                )}
+                {mode === "experience" && (
+                  <Badge variant="default" className="text-[10px]">
+                    {preferences.ambiancePreference} setting
+                  </Badge>
+                )}
+                {mode === "wellness" && hs && (
+                  <Badge
+                    variant={hs.stressLevel === "high" ? "warning" : "default"}
+                    className="text-[10px] gap-1"
+                  >
+                    <Heart className="w-3 h-3" />
+                    {hs.stressLevel} stress
+                  </Badge>
+                )}
+                {mode === "wellness" && hs && (
+                  <Badge
+                    variant={hs.recoveryScore < 60 ? "warning" : "default"}
+                    className="text-[10px] gap-1"
+                  >
+                    <Zap className="w-3 h-3" />
+                    recovery {hs.recoveryScore}
                   </Badge>
                 )}
                 {preferences.dietary.length > 0 ? (
@@ -116,13 +144,17 @@ export function ParticipantCard({
                     {preferences.cuisineAffinities.slice(0, 2).join(", ")}
                   </Badge>
                 )}
-                <Badge variant="default" className="text-[10px]">
-                  {mode === "travel" ? preferences.ambiancePreference + " lodging" : preferences.ambiancePreference}
-                </Badge>
+                {mode !== "experience" && (
+                  <Badge variant="default" className="text-[10px]">
+                    {mode === "travel" ? preferences.ambiancePreference + " lodging"
+                      : mode === "wellness" ? preferences.ambiancePreference + " retreat"
+                      : preferences.ambiancePreference}
+                  </Badge>
+                )}
               </div>
 
               {/* Health signals for Aurora members */}
-              {hs && (
+              {hs && mode !== "wellness" && (
                 <div className="flex items-center gap-4 mt-3 text-[11px] text-white/40">
                   <span className="flex items-center gap-1">
                     <Heart className="w-3 h-3" />
@@ -136,6 +168,26 @@ export function ParticipantCard({
                     <Zap className="w-3 h-3" />
                     Stress {hs.stressLevel}
                   </span>
+                </div>
+              )}
+              {/* Wellness mode: prominent health signals */}
+              {hs && mode === "wellness" && (
+                <div className="mt-3 p-2.5 rounded-lg bg-white/[0.03] border border-white/[0.06]">
+                  <p className="text-[10px] uppercase tracking-[0.1em] text-white/30 mb-2">Wearable Data</p>
+                  <div className="flex items-center gap-4 text-[11px]">
+                    <span className={`flex items-center gap-1 ${hs.recoveryScore < 60 ? "text-[#C75050]" : "text-white/50"}`}>
+                      <Heart className="w-3 h-3" />
+                      Recovery {hs.recoveryScore}
+                    </span>
+                    <span className={`flex items-center gap-1 ${hs.sleepScore < 65 ? "text-[#C75050]" : "text-white/50"}`}>
+                      <Moon className="w-3 h-3" />
+                      Sleep {hs.sleepScore}
+                    </span>
+                    <span className={`flex items-center gap-1 ${hs.stressLevel === "high" ? "text-[#C75050]" : "text-white/50"}`}>
+                      <Zap className="w-3 h-3" />
+                      Stress {hs.stressLevel}
+                    </span>
+                  </div>
                 </div>
               )}
 

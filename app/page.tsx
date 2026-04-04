@@ -185,6 +185,50 @@ export default function DashboardPage() {
             </Link>
           </div>
         </Card>
+
+        <Card className="p-6">
+          <div className="flex flex-col sm:flex-row items-start justify-between gap-4">
+            <div>
+              <h3 className="text-base font-medium text-[#F5F5F5] mb-2">
+                Private Art Gallery Tour + Tasting — SoHo, NYC
+              </h3>
+              <p className="text-sm text-white/40 max-w-2xl leading-relaxed">
+                4 guests. A professional art collector, two business executives, and
+                a guest with limited art background. Competing expertise levels, wine
+                preferences, and a tight 3-hour afternoon window. Ensemble finds the
+                experience that engages everyone.
+              </p>
+            </div>
+            <Link href="/create" onClick={() => loadScenario("experience")}>
+              <Button variant="secondary" type="button" className="shrink-0">
+                Try experience
+                <ArrowRight className="w-4 h-4" />
+              </Button>
+            </Link>
+          </div>
+        </Card>
+
+        <Card className="p-6">
+          <div className="flex flex-col sm:flex-row items-start justify-between gap-4">
+            <div>
+              <h3 className="text-base font-medium text-[#F5F5F5] mb-2">
+                Recovery Retreat — Hudson Valley
+              </h3>
+              <p className="text-sm text-white/40 max-w-2xl leading-relaxed">
+                4 participants. One shows critically high stress from wearables, one
+                is vegan with Ayurvedic preferences, one needs wheelchair access, and
+                one wants high-intensity fitness. Ensemble balances recovery needs,
+                dietary constraints, and accessibility for a 3-day retreat.
+              </p>
+            </div>
+            <Link href="/create" onClick={() => loadScenario("wellness")}>
+              <Button variant="secondary" type="button" className="shrink-0">
+                Try wellness
+                <ArrowRight className="w-4 h-4" />
+              </Button>
+            </Link>
+          </div>
+        </Card>
       </div>
     </div>
   );

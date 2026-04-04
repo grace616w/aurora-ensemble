@@ -7,13 +7,15 @@ import { ParticipantCard } from "@/components/participant-card";
 import { PreferenceGraph } from "@/components/preference-graph";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, ArrowLeft, Plane, MapPin, Accessibility } from "lucide-react";
+import { ArrowRight, ArrowLeft, Plane, MapPin, Accessibility, Palette, Heart } from "lucide-react";
 import { useState } from "react";
 import { travelFlights } from "@/lib/mock-data";
 
 export default function ParticipantsPage() {
   const { event, participants, removeParticipant, setCurrentStep } = useApp();
   const isTravel = event.type === "travel";
+  const isExperience = event.type === "experience";
+  const isWellness = event.type === "wellness";
   const [toastVisible, setToastVisible] = useState(false);
 
   const handleSendIntake = () => {
@@ -44,7 +46,7 @@ export default function ParticipantsPage() {
             <div key={member.id} className="animate-fade-in-up">
               <ParticipantCard
                 member={member}
-                mode={isTravel ? "travel" : "dinner"}
+                mode={event.type}
                 flight={isTravel ? travelFlights.find(f => f.participantId === member.id) : undefined}
                 onRemove={
                   participants.length > 2
@@ -67,7 +69,7 @@ export default function ParticipantsPage() {
 
           <Card className="p-5">
             <h3 className="text-xs font-medium uppercase tracking-[0.12em] text-white/30 mb-3">
-              {isTravel ? "Logistics Overview" : "Quick Summary"}
+              {isTravel ? "Logistics Overview" : isExperience ? "Experience Overview" : isWellness ? "Wellness Overview" : "Quick Summary"}
             </h3>
             <div className="space-y-2 text-xs text-white/40">
               <p>
@@ -109,6 +111,53 @@ export default function ParticipantsPage() {
                       {new Set(participants.flatMap(p => p.preferences.dietary)).size}
                     </span>{" "}
                     dietary requirements carry over to on-trip dining
+                  </p>
+                </>
+              ) : isExperience ? (
+                <>
+                  <div className="pt-2 mt-2 border-t border-white/[0.06] space-y-2">
+                    <p className="flex items-center gap-1.5">
+                      <Palette className="w-3 h-3 shrink-0" />
+                      Art + wine experience format
+                    </p>
+                    <p className="flex items-center gap-1.5">
+                      <MapPin className="w-3 h-3 shrink-0" />
+                      SoHo / Chelsea neighborhood cluster
+                    </p>
+                  </div>
+                  <p className="pt-2 mt-2 border-t border-white/[0.06]">
+                    <span className="text-white/60 font-medium">
+                      {new Set(participants.flatMap((p) => p.preferences.dietary)).size}
+                    </span>{" "}
+                    dietary requirements for catering
+                  </p>
+                </>
+              ) : isWellness ? (
+                <>
+                  <div className="pt-2 mt-2 border-t border-white/[0.06] space-y-2">
+                    <p className="flex items-center gap-1.5">
+                      <Heart className="w-3 h-3 shrink-0" />
+                      <span className="text-white/60 font-medium">
+                        {participants.filter(p => p.preferences.healthSignals?.stressLevel === "high").length}
+                      </span>{" "}
+                      participant{participants.filter(p => p.preferences.healthSignals?.stressLevel === "high").length !== 1 && "s"} with elevated stress
+                    </p>
+                    {participants.some(p => p.preferences.accessibility.length > 0) && (
+                      <p className="flex items-center gap-1.5 text-[#A0784A]">
+                        <Accessibility className="w-3 h-3 shrink-0" />
+                        Accessibility requirements flagged
+                      </p>
+                    )}
+                    <p className="flex items-center gap-1.5">
+                      <MapPin className="w-3 h-3 shrink-0" />
+                      3-day retreat format (Fri-Sun)
+                    </p>
+                  </div>
+                  <p className="pt-2 mt-2 border-t border-white/[0.06]">
+                    <span className="text-white/60 font-medium">
+                      {new Set(participants.flatMap((p) => p.preferences.dietary)).size}
+                    </span>{" "}
+                    dietary requirements across all meals
                   </p>
                 </>
               ) : (

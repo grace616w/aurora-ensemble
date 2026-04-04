@@ -10,75 +10,11 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ArrowLeft, Shield, Clock, AlertTriangle } from "lucide-react";
-import { useEffect, useReducer, useState } from "react";
-import { ReconciliationResult, EventDetails, MemberProfile, Venue } from "@/lib/types";
+import { useEffect, useRef, useState } from "react";
+import { ReconciliationResult } from "@/lib/types";
 import { FlightTimeline } from "@/components/flight-timeline";
 import { DisruptionSimulator } from "@/components/disruption-simulator";
 import { travelFlights, disruptionScenario } from "@/lib/mock-data";
-
-type FetchState = {
-  loading: boolean;
-  data: ReconciliationResult | null;
-};
-
-type FetchAction =
-  | { type: "start" }
-  | { type: "success"; data: ReconciliationResult }
-  | { type: "error" };
-
-function fetchReducer(state: FetchState, action: FetchAction): FetchState {
-  switch (action.type) {
-    case "start":
-      return { loading: true, data: null };
-    case "success":
-      return { loading: false, data: action.data };
-    case "error":
-      return { loading: false, data: null };
-  }
-}
-
-function useFetchReconciliation(
-  event: EventDetails,
-  participants: MemberProfile[],
-  venues: Venue[],
-  existingResult: ReconciliationResult | null,
-  onResult: (data: ReconciliationResult) => void
-) {
-  const [state, dispatch] = useReducer(fetchReducer, {
-    loading: !existingResult,
-    data: existingResult,
-  });
-
-  useEffect(() => {
-    if (existingResult) return;
-
-    dispatch({ type: "start" });
-
-    const controller = new AbortController();
-
-    fetch("/api/reconcile", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ event, participants, venues }),
-      signal: controller.signal,
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        dispatch({ type: "success", data });
-        onResult(data);
-      })
-      .catch((err) => {
-        if (err.name !== "AbortError") {
-          console.error("Reconciliation error:", err);
-          dispatch({ type: "error" });
-        }
-      });
-
-    return () => controller.abort();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  return state;
-}
 
 export default function ReconcilePage() {
   const {
@@ -90,15 +26,34 @@ export default function ReconcilePage() {
     setCurrentStep,
   } = useApp();
 
-  const { loading, data } = useFetchReconciliation(
-    event,
-    participants,
-    activeVenues,
-    reconciliationResult,
-    setReconciliationResult
-  );
+  const [loading, setLoading] = useState(false);
+  const [localResult, setLocalResult] = useState<ReconciliationResult | null>(null);
+  const hasFetchedRef = useRef(false);
 
-  const result = reconciliationResult || data;
+  const result = reconciliationResult || localResult;
+
+  useEffect(() => {
+    if (result || hasFetchedRef.current) return;
+    hasFetchedRef.current = true;
+    setLoading(true);
+
+    fetch("/api/reconcile", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ event, participants, venues: activeVenues }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setLocalResult(data);
+        setReconciliationResult(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Reconciliation error:", err);
+        setLoading(false);
+      });
+  }, [result]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const isTravel = event.type === "travel";
   const [flightDisrupted, setFlightDisrupted] = useState(false);
 

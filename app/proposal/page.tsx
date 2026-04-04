@@ -108,11 +108,18 @@ export default function ProposalPage() {
 
       <div>
         <h1 className="text-2xl font-light tracking-[0.02em] text-[#F5F5F5] mb-2">
-          {event.type === "travel" ? "Lodging Proposal" : "Group Proposal"}
+          {event.type === "travel" ? "Lodging Proposal"
+            : event.type === "experience" ? "Experience Proposal"
+            : event.type === "wellness" ? "Wellness Proposal"
+            : "Group Proposal"}
         </h1>
         <p className="text-sm text-white/40">
           {event.type === "travel"
             ? "Top recommendations — tap avatars to vote on lodging"
+            : event.type === "experience"
+            ? "Top recommendations — tap avatars to vote on experiences"
+            : event.type === "wellness"
+            ? "Top recommendations — tap avatars to vote on retreats"
             : "Top 3 recommendations — tap avatars to vote"}
         </p>
       </div>
@@ -209,6 +216,10 @@ export default function ProposalPage() {
                 <p className="text-xs text-white/40 mt-0.5">
                   {event.type === "travel"
                     ? `Your Lifestyle Strategist will coordinate booking at ${winnerVenue?.name}, arrange flights and transfers, and send the complete itinerary to all ${participants.length} travelers.`
+                    : event.type === "experience"
+                    ? `Your Lifestyle Strategist will arrange the private experience at ${winnerVenue?.name} and send confirmations to all ${participants.length} participants.`
+                    : event.type === "wellness"
+                    ? `Your Lifestyle Strategist will book the retreat at ${winnerVenue?.name} and coordinate dietary and accessibility needs for all ${participants.length} participants.`
                     : `Your Lifestyle Strategist will finalize the reservation at ${winnerVenue?.name} and send confirmations to all participants.`}
                 </p>
               </div>
