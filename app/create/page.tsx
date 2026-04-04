@@ -17,8 +17,48 @@ const eventTypes = [
   { value: "wellness", label: "Wellness" },
 ];
 
+const typeConfig: Record<string, { locationLabel: string; locationPlaceholder: string; dateLabel: string; timeLabel: string; timePlaceholder: string; vibeLabel: string; vibePlaceholder: string }> = {
+  dinner: {
+    locationLabel: "Location",
+    locationPlaceholder: "City or neighborhood",
+    dateLabel: "Date",
+    timeLabel: "Time Window",
+    timePlaceholder: "e.g. 19:00 - 23:00",
+    vibeLabel: "Vibe",
+    vibePlaceholder: "What's the occasion? What energy are you going for?",
+  },
+  travel: {
+    locationLabel: "Destination",
+    locationPlaceholder: "e.g. Turks & Caicos, Aspen, Amalfi Coast",
+    dateLabel: "Check-in Date",
+    timeLabel: "Duration",
+    timePlaceholder: "e.g. May 15-19 (4 nights)",
+    vibeLabel: "Trip Purpose",
+    vibePlaceholder: "What's the trip for? Celebration, team retreat, family vacation?",
+  },
+  experience: {
+    locationLabel: "Location",
+    locationPlaceholder: "City or venue",
+    dateLabel: "Date",
+    timeLabel: "Time Window",
+    timePlaceholder: "e.g. 14:00 - 18:00",
+    vibeLabel: "Vibe",
+    vibePlaceholder: "What kind of experience? Art, music, adventure, private event?",
+  },
+  wellness: {
+    locationLabel: "Location",
+    locationPlaceholder: "City, resort, or retreat center",
+    dateLabel: "Start Date",
+    timeLabel: "Duration",
+    timePlaceholder: "e.g. 3 days, weekend, week-long",
+    vibeLabel: "Focus",
+    vibePlaceholder: "What's the goal? Recovery, detox, fitness, mindfulness?",
+  },
+};
+
 export default function CreatePage() {
-  const { event, setEvent, setCurrentStep } = useApp();
+  const { event, setEvent, setCurrentStep, loadScenario } = useApp();
+  const config = typeConfig[event.type] || typeConfig.dinner;
 
   return (
     <div className="space-y-8 animate-fade-in-up">
@@ -44,27 +84,29 @@ export default function CreatePage() {
               id="event-type"
               options={eventTypes}
               value={event.type}
-              onChange={(e) =>
-                setEvent({
-                  ...event,
-                  type: e.target.value as EventType,
-                })
-              }
+              onChange={(e) => {
+                const newType = e.target.value as EventType;
+                if (newType === "travel" || newType === "dinner") {
+                  loadScenario(newType);
+                } else {
+                  setEvent({ ...event, type: newType });
+                }
+              }}
             />
             <Input
-              label="Location"
+              label={config.locationLabel}
               id="location"
               value={event.location}
               onChange={(e) =>
                 setEvent({ ...event, location: e.target.value })
               }
-              placeholder="City or region"
+              placeholder={config.locationPlaceholder}
             />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <Input
-              label="Date"
+              label={config.dateLabel}
               id="date"
               type="date"
               value={event.date}
@@ -73,22 +115,22 @@ export default function CreatePage() {
               }
             />
             <Input
-              label={event.type === "travel" ? "Duration" : "Time Window"}
+              label={config.timeLabel}
               id="time"
               value={event.timeWindow}
               onChange={(e) =>
                 setEvent({ ...event, timeWindow: e.target.value })
               }
-              placeholder={event.type === "travel" ? "e.g. May 15-19 (4 nights)" : "e.g. 19:00 - 23:00"}
+              placeholder={config.timePlaceholder}
             />
           </div>
 
           <Textarea
-            label="Vibe"
+            label={config.vibeLabel}
             id="vibe"
             value={event.vibe}
             onChange={(e) => setEvent({ ...event, vibe: e.target.value })}
-            placeholder="What's the occasion? What energy are you going for?"
+            placeholder={config.vibePlaceholder}
             rows={3}
           />
         </div>
